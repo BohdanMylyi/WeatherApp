@@ -18,12 +18,12 @@ export const fetchWeather = createAsyncThunk(
 
 const weatherSlice = createSlice({
   name: 'weather',
-  initialState: {today: {}, weekly: [], status: 'idle'},
+  initialState: {today: [], weekly: [], status: 'idle'},
   reducers: {},
   extraReducers: builder => {
     builder.addCase(fetchWeather.fulfilled, (state, action) => {
-      state.today = action.payload.daily.temperature_2m_max; // Сьогоднішня погода
-      state.weekly = action.payload.daily.temperature_2m_max; // Погода на тиждень
+      state.today = action.payload.daily.temperature_2m_min;
+      state.weekly = action.payload.daily.temperature_2m_max;
       state.status = 'succeeded';
     });
   },
