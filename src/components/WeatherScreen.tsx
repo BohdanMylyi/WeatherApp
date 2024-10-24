@@ -8,18 +8,32 @@ import {
   TextInput,
   View,
   StyleSheet,
-  Image,
 } from 'react-native';
 import {useTheme} from '../theme/ThemeProvider';
 import {toggleTheme} from '../slices/themeSlice';
+import {RootState} from '../store/store';
+import {AppDispatch} from '../store/store';
 
-const WeatherScreen = ({navigation}) => {
-  const dispatch = useDispatch();
-  const weather = useSelector(state => state.weather);
+interface WeatherItem {
+  date: string;
+  maxTemperature: number;
+  minTemperature: number;
+}
+
+interface WeatherState {
+  today: number[];
+  weekly: WeatherItem[];
+}
+
+const WeatherScreen: React.FC<{navigation: any}> = ({navigation}) => {
+  const dispatch: AppDispatch = useDispatch();
+  const weather = useSelector(
+    (state: RootState) => state.weather,
+  ) as WeatherState;
   const theme = useTheme();
 
-  const [latitude, setLatitude] = useState('50.4501');
-  const [longitude, setLongitude] = useState('30.5234');
+  const [latitude, setLatitude] = useState<string>('50.4501');
+  const [longitude, setLongitude] = useState<string>('30.5234');
 
   useEffect(() => {
     dispatch(
@@ -27,8 +41,8 @@ const WeatherScreen = ({navigation}) => {
     );
   }, [dispatch, latitude, longitude]);
 
-  function getAverageToday() {
-    if (!weather.today || weather.today.length === 0) return 0;
+  function getAverageToday(): string {
+    if (!weather.today || weather.today.length === 0) return '0';
     const total = weather.today.reduce((acc, temp) => acc + temp, 0);
     const averageToday = total / weather.today.length;
     return averageToday.toFixed(2);
@@ -44,7 +58,6 @@ const WeatherScreen = ({navigation}) => {
         <TextInput
           style={[styles.input, {borderColor: theme.text}]}
           placeholder="Latitude"
-          placeholderTextColor={theme.placeholderText}
           value={latitude}
           onChangeText={setLatitude}
           keyboardType="numeric"
@@ -52,7 +65,6 @@ const WeatherScreen = ({navigation}) => {
         <TextInput
           style={[styles.input, {borderColor: theme.text}]}
           placeholder="Longitude"
-          placeholderTextColor={theme.placeholderText}
           value={longitude}
           onChangeText={setLongitude}
           keyboardType="numeric"

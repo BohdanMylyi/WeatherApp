@@ -17,7 +17,11 @@ export const fetchWeather = createAsyncThunk(
 
 const weatherSlice = createSlice({
   name: 'weather',
-  initialState: {today: [], weekly: [], status: 'idle'},
+  initialState: {
+    today: [],
+    weekly: [],
+    status: 'idle',
+  },
   reducers: {},
   extraReducers: builder => {
     builder.addCase(fetchWeather.fulfilled, (state, action) => {
