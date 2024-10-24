@@ -8,6 +8,7 @@ import {
   TextInput,
   View,
   StyleSheet,
+  Image,
 } from 'react-native';
 import {useTheme} from '../theme/ThemeProvider';
 import {toggleTheme} from '../slices/themeSlice';
@@ -50,25 +51,30 @@ const WeatherScreen: React.FC<{navigation: any}> = ({navigation}) => {
 
   return (
     <View style={[styles.container, {backgroundColor: theme.background}]}>
-      <Text style={[styles.averageText, {color: theme.text}]}>
-        Average Today: {getAverageToday()}°C
-      </Text>
+      <View style={[styles.box, {backgroundColor: theme.backgroundColor}]}>
+        <View style={styles.logoContainer}>
+          <Image source={{uri: theme.logo}} style={styles.logo} />
+        </View>
+        <Text style={[styles.averageText, {color: theme.text}]}>
+          Average Today: {getAverageToday()}°C
+        </Text>
 
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={[styles.input, {borderColor: theme.text}]}
-          placeholder="Latitude"
-          value={latitude}
-          onChangeText={setLatitude}
-          keyboardType="numeric"
-        />
-        <TextInput
-          style={[styles.input, {borderColor: theme.text}]}
-          placeholder="Longitude"
-          value={longitude}
-          onChangeText={setLongitude}
-          keyboardType="numeric"
-        />
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={[styles.input, {borderColor: theme.text}]}
+            placeholder="Latitude"
+            value={latitude}
+            onChangeText={setLatitude}
+            keyboardType="numeric"
+          />
+          <TextInput
+            style={[styles.input, {borderColor: theme.text}]}
+            placeholder="Longitude"
+            value={longitude}
+            onChangeText={setLongitude}
+            keyboardType="numeric"
+          />
+        </View>
       </View>
 
       <Button title="Switch Theme" onPress={() => dispatch(toggleTheme())} />
@@ -78,13 +84,15 @@ const WeatherScreen: React.FC<{navigation: any}> = ({navigation}) => {
         keyExtractor={item => item.date}
         renderItem={({item}) => (
           <View
-            style={[styles.weatherItem, {backgroundColor: theme.background}]}>
+            style={[
+              styles.weatherItem,
+              {backgroundColor: theme.backgroundColor},
+            ]}>
             <Text style={[styles.weatherText, {color: theme.text}]}>
-              {item.date}: Max {item.maxTemperature}°C, Min{' '}
-              {item.minTemperature}°C
+              {item.date}Average {item}°C
             </Text>
             <Button
-              title="Деталі"
+              title="Details"
               color={theme.button}
               onPress={() => navigation.navigate('Detail', {day: item})}
             />
@@ -96,6 +104,20 @@ const WeatherScreen: React.FC<{navigation: any}> = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  box: {
+    height: 200,
+    padding: 20,
+    borderRadius: 20,
+  },
+  logoContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  logo: {
+    height: 50,
+    width: 50,
+  },
   container: {
     flex: 1,
     padding: 20,
@@ -121,12 +143,15 @@ const styles = StyleSheet.create({
   weatherItem: {
     padding: 15,
     marginVertical: 8,
+    marginHorizontal: 'auto',
     borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 2,
+    width: 350,
+    textAlign: 'center',
   },
   weatherText: {
     fontSize: 18,
