@@ -11,7 +11,6 @@ export const fetchWeather = createAsyncThunk(
     const response = await fetch(
       `https://api.open-meteo.com/v1/forecast?latitude=${location.lat}&longitude=${location.lon}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum`,
     );
-    console.log(response);
     return await response.json();
   },
 );
